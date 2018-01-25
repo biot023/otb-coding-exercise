@@ -1,13 +1,26 @@
 module Jobs
 
   def self.execution_order(input)
-    ExecutionOrderGenerator.new(input).execution_order
+    ExecutionOrderGenerator.new.generate_from(input)
   end
 
-  class ExecutionOrderGenerator < Struct.new(:input)
+  class ExecutionOrderGenerator
 
-    def execution_order
-      jobs = input.split("\n").map { |desc| Job.new(desc) }
+    def generate_from(input)
+      output_in_execution_order(
+        ensure_no_circular_dependencies(
+          generate_jobs(input)
+        )
+      )
+    end
+
+    private
+
+    def generate_jobs(input)
+      input.split("\n").map { |desc| Job.new(desc) }
+    end
+
+    def ensure_no_circular_dependencies(jobs)
       jobs.each do |origin|
         job, count = origin, 0
         while job.dependency
@@ -16,6 +29,10 @@ module Jobs
           count += 1
         end
       end
+      jobs
+    end
+
+    def output_in_execution_order(jobs)
       jobs.sort.map(&:name).join(" ")
     end
 
