@@ -1,5 +1,18 @@
 module Jobs
 
+  ##
+  # Take a set of job descriptions in an input string.
+  # A job without dependencies looks like this: "a =>"
+  # A job with a dependency looks like this: "a => b", where the job's name is "a", and the
+  # dependency's name is "b".
+  # An input string can contain many job descriptions by separating them with the `\n` character.
+  #
+  # So a multiple-description string could look like this:
+  #   "a =>\nb => c\nc =>"
+  #
+  # Return a simple string showing the run order of the jobs, like this:
+  #   "a c b"
+  #
   def self.execution_order(input)
     ExecutionOrderGenerator.new.generate_from(input)
   end
