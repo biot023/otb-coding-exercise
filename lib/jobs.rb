@@ -1,7 +1,7 @@
 module Jobs
 
   def self.execution_order(input)
-    jobs = input.split("\n").map { |desc| Job.new(desc) }.sort
+    jobs = input.split("\n").map { |desc| Job.new(desc) }
     jobs.each do |origin|
       job, count = origin, 0
       while job.dependency
@@ -10,7 +10,7 @@ module Jobs
         count += 1
       end
     end
-    jobs.map(&:name).join(" ")
+    jobs.sort.map(&:name).join(" ")
   end
 
   class Job
