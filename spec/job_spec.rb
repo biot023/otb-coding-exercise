@@ -77,21 +77,36 @@ describe Jobs::Job do
       expect(b <=> a).to eq(-1)
     end
 
-    describe "examples from acceptance" do
-
-      it "sorts by first in and on dependency" do
-        jobs = [
-          create("a =>"),
-          create("b => c"),
-          create("c => f"),
-          create("d => a"),
-          create("e => b"),
-          create("f =>"),
+    describe "example from acceptance" do
+      subject do
+        [
+          "a =>",
+          "b => c",
+          "c => f",
+          "d => a",
+          "e => b",
+          "f =>",
         ]
-        expect(jobs.sort.map(&:name)).to eq(["a", "f", "c", "b", "d", "e"])
+          .map { |desc| create(desc) }
+          .sort
+          .map(&:name)
       end
 
-    end
+      it "contains all the jobs" do
+        expect(subject.sort).to eq(["a", "b", "c", "d", "e", "f"])
+      end
+
+      [["f", "c"], ["c", "b"], ["b", "e"], ["a", "d"]].each do |(prev_job, next_job)|
+
+        it "sorts #{ prev_job } before #{ next_job }" do
+          prev_index = subject.find_index(prev_job)
+          next_index = subject.find_index(next_job)
+          expect(next_index).to be > prev_index
+        end
+
+      end
+
+    end # /example from acceptance
 
   end # /comparison
 

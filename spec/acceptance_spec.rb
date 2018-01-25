@@ -6,17 +6,21 @@ describe "Acceptance tests" do
     Jobs.execution_order(input)
   end
 
+  def subject_as_array(input)
+    subject(input).split(" ")
+  end
+
   it "returns the solitary job" do
     expect(subject("a =>")).to eq("a")
   end
 
   it "returns a list of unordered jobs when there are no dependencies" do
-    ordered_jobs = subject("a =>\nb =>\nc =>").split(" ")
+    ordered_jobs = subject_as_array("a =>\nb =>\nc =>")
     expect(ordered_jobs.sort).to eq(["a", "b", "c"])
   end
 
   it "observes a simple dependency when ordering jobs" do
-    ordered_jobs = subject("a =>\nb => c\nc =>").split(" ")
+    ordered_jobs = subject_as_array("a =>\nb => c\nc =>")
     expect(ordered_jobs.size).to eq(3)
     expect(ordered_jobs).to include("a")
     index_of_b = ordered_jobs.find_index("b")
@@ -25,7 +29,7 @@ describe "Acceptance tests" do
   end
 
   it "observes more complex dependencies" do
-    ordered_jobs = subject(
+    ordered_jobs = subject_as_array(
       [
         "a =>",
         "b => c",
@@ -36,8 +40,7 @@ describe "Acceptance tests" do
       ]
         .join("\n")
     )
-      .split(" ")
-    expect(ordered_jobs.sort.join(" ")).to eq("a b c d e f")
+    expect(ordered_jobs.sort).to eq(["a", "b", "c", "d", "e", "f"])
     [["f", "c"], ["c", "b"], ["b", "e"], ["a", "d"]].each do |(prev_job, next_job)|
       prev_index = ordered_jobs.find_index(prev_job)
       next_index = ordered_jobs.find_index(next_job)

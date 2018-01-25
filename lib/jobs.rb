@@ -4,7 +4,7 @@ module Jobs
   end
 
   class Job
-    attr_accessor :name, :dependency
+    attr_reader :name, :dependency
     PATTERN = /^([a-z]) =>( ([a-z]))?$/
 
     def initialize(desc)
