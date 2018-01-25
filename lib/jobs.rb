@@ -17,12 +17,24 @@ module Jobs
     end
 
     def <=>(other)
-      if dependency && dependency == other.name
-        1
-      elsif other.dependency && other.dependency == name
-        -1
+      if dependency
+        if other.dependency
+          if dependency == other.name
+            1
+          elsif other.dependency == name
+            -1
+          else
+            0
+          end
+        else
+          1
+        end
       else
-        0
+        if other.dependency
+          -1
+        else
+          0
+        end
       end
     end
 

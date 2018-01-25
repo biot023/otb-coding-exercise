@@ -24,7 +24,25 @@ describe "Acceptance tests" do
     expect(index_of_b).to eq(index_of_c + 1)
   end
 
-  xit "observes more complex dependencies" do
+  it "observes more complex dependencies" do
+    ordered_jobs = subject(
+      [
+        "a =>",
+        "b => c",
+        "c => f",
+        "d => a",
+        "e => b",
+        "f =>",
+      ]
+        .join("\n")
+    )
+      .split(" ")
+    expect(ordered_jobs.sort.join(" ")).to eq("a b c d e f")
+    [["f", "c"], ["c", "b"], ["b", "e"], ["a", "d"]].each do |(prev_job, next_job)|
+      prev_index = ordered_jobs.find_index(prev_job)
+      next_index = ordered_jobs.find_index(next_job)
+      expect(next_index).to be > prev_index
+    end
   end
 
 end

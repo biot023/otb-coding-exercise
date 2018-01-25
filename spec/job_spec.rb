@@ -38,14 +38,26 @@ describe Jobs::Job do
 
     it "jobs with unrelated dependencies are the same" do
       a = create("a => x")
-      b = create("b =>")
-      c = create("c => y")
+      b = create("b => y")
+      c = create("c => z")
       expect(a <=> b).to eq(0)
       expect(a <=> c).to eq(0)
       expect(b <=> a).to eq(0)
       expect(b <=> c).to eq(0)
       expect(c <=> b).to eq(0)
       expect(c <=> a).to eq(0)
+    end
+
+    it "a job with no dependency comes before a job with a dependency" do
+      a = create("a =>")
+      b = create("b => c")
+      expect(a <=> b).to eq(-1)
+    end
+
+    it "a job with a dependency comes after a job with no dependency" do
+      a = create("a => c")
+      b = create("b =>")
+      expect(a <=> b).to eq(1)
     end
 
     it "a job comes later than a job it depends on" do
@@ -59,6 +71,22 @@ describe Jobs::Job do
       a = create("a => b")
       b = create("b => c")
       expect(b <=> a).to eq(-1)
+    end
+
+    describe "examples from acceptance" do
+
+      it "sorts by first in and on dependency" do
+        jobs = [
+          create("a =>"),
+          create("b => c"),
+          create("c => f"),
+          create("d => a"),
+          create("e => b"),
+          create("f =>"),
+        ]
+        expect(jobs.sort.map(&:name)).to eq(["a", "f", "c", "b", "d", "e"])
+      end
+
     end
 
   end # /comparison
