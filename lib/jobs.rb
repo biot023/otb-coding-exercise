@@ -14,26 +14,22 @@ module Jobs
       else
         raise("Improper Job descriptor #{ desc.inspect }")
       end
-      if @dependency == @name
-        raise("Jobs can't depend on themselves: #{ desc.inspect }")
-      end
+      raise("Jobs can't depend on themselves: #{ desc.inspect }") if @dependency == @name
     end
 
     def <=>(other)
-      if dependency
-        if other.dependency
-          if dependency == other.name
-            1
-          elsif other.dependency == name
-            -1
-          else
-            0
-          end
-        else
+      dep_a, dep_b = dependency, other.dependency
+      case [!!dep_a, !!dep_b]
+      when [false, false]
+        0
+      when [true, false]
+        1
+      when [false, true]
+        -1
+      when [true, true]
+        if dep_a == other.name
           1
-        end
-      else
-        if other.dependency
+        elsif dep_b == name
           -1
         else
           0
