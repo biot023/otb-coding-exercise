@@ -6,6 +6,10 @@ describe Jobs do
       Jobs.execution_order(input)
     end
 
+    it "returns a single job" do
+      expect(subject("a =>")).to eq("a")
+    end
+
     it "returns in whatever order if no order specified" do
       expect(subject("a =>\nb =>\nc =>")).to eq("a b c")
       expect(subject("c =>\nb =>\na =>")).to eq("c b a")

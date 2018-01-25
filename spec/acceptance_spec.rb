@@ -11,7 +11,11 @@ describe "Acceptance tests" do
   end
 
   it "returns a list of unordered jobs" do
-    expect(subject("a =>\nb =>\nc =>")).to eq("a b c")
+    ordered_jobs = subject("a =>\nb =>\nc =>").split(" ")
+    expect(ordered_jobs.sort).to eq(["a", "b", "c"])
+  end
+
+  xit "returns jobs with a specified order" do
   end
 
 end
