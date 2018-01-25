@@ -24,6 +24,10 @@ describe Jobs::Job do
       expect { create("a") }.to raise_error(RuntimeError)
     end
 
+    it "can't depend on itself" do
+      expect { create("x => x") }.to raise_error("Jobs can't depend on themselves: \"x => x\"")
+    end
+
   end # /construction
 
   describe "comparison" do

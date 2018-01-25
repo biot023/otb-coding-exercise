@@ -45,4 +45,9 @@ describe "Acceptance tests" do
     end
   end
 
+  it "throws a descriptive error when a job depends on itself" do
+    expect { subject("a =>\nb =>\nc => c") }
+      .to raise_error("Jobs can't depend on themselves: \"c => c\"")
+  end
+
 end

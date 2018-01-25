@@ -14,6 +14,9 @@ module Jobs
       else
         raise("Improper Job descriptor #{ desc.inspect }")
       end
+      if @dependency == @name
+        raise("Jobs can't depend on themselves: #{ desc.inspect }")
+      end
     end
 
     def <=>(other)
