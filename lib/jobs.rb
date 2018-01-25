@@ -5,8 +5,8 @@ module Jobs
   # A job without dependencies looks like this: "a =>"
   # A job with a dependency looks like this: "a => b", where the job's name is "a", and the
   # dependency's name is "b".
-  # An input string can contain many job descriptions by separating them with the `\n` character.
   #
+  # An input string can contain many job descriptions by separating them with the `\n` character.
   # So a multiple-description string could look like this:
   #   "a =>\nb => c\nc =>"
   #
