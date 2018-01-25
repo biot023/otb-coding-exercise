@@ -10,13 +10,13 @@ describe Jobs do
       expect(subject("a =>")).to eq("a")
     end
 
-    it "returns in first-in order if no specified order" do
+    it "returns in first-in order if no dependencies" do
       expect(subject("a =>\nb =>\nc =>")).to eq("a b c")
       expect(subject("c =>\nb =>\na =>")).to eq("c b a")
       expect(subject("c =>\na =>\nb =>")).to eq("c a b")
     end
 
-    it "returns first-in order and specified order" do
+    it "returns first-in order and order specified by dependency" do
       expect(subject("a =>\nb => c\nc =>")).to eq("a c b")
     end
   end # /.execution_order(input)
