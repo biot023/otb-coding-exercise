@@ -64,6 +64,7 @@ I could have got rid of the `ExecutionOrderGenerator` class by declaring the alg
         def output_in_execution_order(jobs)
           # ...
         end
+
       end
     end
 
@@ -81,7 +82,7 @@ borderline for splitting them up with local variables to have them read in order
       output_in_execution_order(jobs)
     end
 
-I think just the three calls reads fine as-is, though, so have left it as nested calls. That's
+I think just the three calls reads fine as-is, though, so have left them as nested calls. That's
 just my aesthetic preference. :)
 
 ## Final observations ##
