@@ -53,4 +53,20 @@ describe "Acceptance tests" do
       .to raise_error("Jobs can't depend on themselves: \"c => c\"")
   end
 
+  it "throws a descriptive error if jobs have circular dependencies" do
+    expect {
+      subject(
+        [
+          "a =>",
+          "b => c",
+          "c => f",
+          "d => a",
+          "e =>",
+          "f => b",
+        ]
+          .join("\n")
+      )
+    }.to raise_error("Jobs can't have circular dependencies")
+  end
+
 end

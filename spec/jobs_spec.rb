@@ -19,5 +19,10 @@ describe Jobs do
     it "returns first-in order and order specified by dependency" do
       expect(subject("a =>\nb => c\nc =>")).to eq("a c b")
     end
+
+    it "can't have circular dependencies" do
+      expect { subject("a => b\nb => c\nc => a") }
+        .to raise_error("Jobs can't have circular dependencies")
+    end
   end # /.execution_order(input)
 end

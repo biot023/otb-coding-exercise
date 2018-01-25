@@ -1,6 +1,16 @@
 module Jobs
+
   def self.execution_order(input)
-    input.split("\n").map { |desc| Job.new(desc) }.sort.map(&:name).join(" ")
+    jobs = input.split("\n").map { |desc| Job.new(desc) }.sort
+    jobs.each do |origin|
+      job, count = origin, 0
+      while job.dependency
+        raise("Jobs can't have circular dependencies") if count == jobs.size
+        job = jobs.find { |other| other.name == job.dependency }
+        count += 1
+      end
+    end
+    jobs.map(&:name).join(" ")
   end
 
   class Job
