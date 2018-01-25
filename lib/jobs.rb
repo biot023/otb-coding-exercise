@@ -1,5 +1,5 @@
 module Jobs
   def self.execution_order(input)
-    input.gsub(/[^a-z]/, '')
+    input.split("\n").map { |job| job.gsub(/[^a-z]/, '') }.join(" ")
   end
 end
