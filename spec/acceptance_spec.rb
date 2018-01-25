@@ -1,6 +1,6 @@
 require './lib/jobs'
 
-describe Jobs do
+describe "Acceptance tests" do
 
   def subject(input)
     Jobs.execution_order(input)
