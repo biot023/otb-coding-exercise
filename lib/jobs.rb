@@ -1,16 +1,24 @@
 module Jobs
 
   def self.execution_order(input)
-    jobs = input.split("\n").map { |desc| Job.new(desc) }
-    jobs.each do |origin|
-      job, count = origin, 0
-      while job.dependency
-        raise("Jobs can't have circular dependencies") if count == jobs.size
-        job = jobs.find { |other| other.name == job.dependency }
-        count += 1
+    ExecutionOrderGenerator.new(input).execution_order
+  end
+
+  class ExecutionOrderGenerator < Struct.new(:input)
+
+    def execution_order
+      jobs = input.split("\n").map { |desc| Job.new(desc) }
+      jobs.each do |origin|
+        job, count = origin, 0
+        while job.dependency
+          raise("Jobs can't have circular dependencies") if count == jobs.size
+          job = jobs.find { |other| other.name == job.dependency }
+          count += 1
+        end
       end
+      jobs.sort.map(&:name).join(" ")
     end
-    jobs.sort.map(&:name).join(" ")
+
   end
 
   class Job
