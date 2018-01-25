@@ -15,7 +15,13 @@ describe "Acceptance tests" do
     expect(ordered_jobs.sort).to eq(["a", "b", "c"])
   end
 
-  xit "returns jobs with a specified order" do
+  it "returns jobs with a specified order" do
+    ordered_jobs = subject("a =>\nb => c\nc =>").split(" ")
+    expect(ordered_jobs.size).to eq(3)
+    expect(ordered_jobs).to include("a")
+    index_of_b = ordered_jobs.find_index("b")
+    index_of_c = ordered_jobs.find_index("c")
+    expect(index_of_b).to eq(index_of_c + 1)
   end
 
 end
