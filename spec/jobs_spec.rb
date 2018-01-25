@@ -26,7 +26,7 @@ describe Jobs do
     end
 
     it "catches circular dependencies that start later in the list" do
-      expect { subject("a => b\nb => c\nc => d\nd => e\ne => c\nf => g\ng =>") }
+      expect { subject("a =>\nb => c\nc => d\nd => e\ne => c\nf => g\ng =>") }
         .to raise_error("Jobs can't have circular dependencies")
     end
 
