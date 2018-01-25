@@ -21,7 +21,7 @@ describe "Acceptance tests" do
     expect(ordered_jobs).to include("a")
     index_of_b = ordered_jobs.find_index("b")
     index_of_c = ordered_jobs.find_index("c")
-    expect(index_of_b).to eq(index_of_c + 1)
+    expect(index_of_b).to be > index_of_c
   end
 
   it "observes more complex dependencies" do
