@@ -25,6 +25,11 @@ describe Jobs do
         .to raise_error("Jobs can't have circular dependencies")
     end
 
+    it "catches circular dependencies that start later in the list" do
+      expect { subject("a => b\nb => c\nc => d\nd => e\ne => c\nf => g\ng =>") }
+        .to raise_error("Jobs can't have circular dependencies")
+    end
+
     it "can have a non-circular daisy-chain of dependencies" do
       expect(subject("a => b\nb => c\nc => d\nd =>")).to eq("d c b a")
     end
