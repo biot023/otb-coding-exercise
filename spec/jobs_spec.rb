@@ -24,5 +24,9 @@ describe Jobs do
       expect { subject("a => b\nb => c\nc => a") }
         .to raise_error("Jobs can't have circular dependencies")
     end
+
+    it "can have a non-circular daisy-chain of dependencies" do
+      expect(subject("a => b\nb => c\nc => d\nd =>")).to eq("d c b a")
+    end
   end # /.execution_order(input)
 end
